@@ -1,5 +1,4 @@
 using Photon.Pun;
-using TMPro.EditorUtilities;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +6,7 @@ public class PlayerBehaviour : MonoBehaviour
 {
     public Text TextName;
 
+    private PoolObject _bulletPool;
     private Joystick _joystick;
     private Rigidbody2D _rigidbody;
     private float _horizontalInput;
@@ -14,6 +14,7 @@ public class PlayerBehaviour : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     private PhotonView _view;
     [SerializeField] private float _speed;
+    [SerializeField] Transform _bulletSpawnPoint;
 
     private void Awake()
     {
@@ -22,12 +23,25 @@ public class PlayerBehaviour : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _view = GetComponent<PhotonView>();
         _joystick = GameObject.FindGameObjectWithTag("Joystick").GetComponent<Joystick>();
+        _bulletPool = GameObject.Find("ObjectPool").GetComponent<PoolObject>();
     }
 
     private void Start()
     {
         TextName.text = _view.Owner.NickName;
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            GameObject bullet = _bulletPool.GetBullet();
+            bullet.transform.position = transform.position;
+            bullet.transform.rotation = transform.rotation;
+            //Instantiate(bullet, _bulletSpawnPoint, )
+        }
+    }
+    
 
     private void FixedUpdate()
     {
