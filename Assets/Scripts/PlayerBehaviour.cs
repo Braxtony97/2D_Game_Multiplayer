@@ -1,13 +1,15 @@
 using Photon.Pun;
+using TMPro.EditorUtilities;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerBehaviour : MonoBehaviour
 {
-    public Joystick Joystick;
+    public Text TextName;
 
+    private Joystick _joystick;
     private Rigidbody2D _rigidbody;
     private float _horizontalInput;
-    private float _verticalInput;
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
     private PhotonView _view;
@@ -19,14 +21,19 @@ public class PlayerBehaviour : MonoBehaviour
         _animator = GetComponent<Animator>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _view = GetComponent<PhotonView>();
+        _joystick = GameObject.FindGameObjectWithTag("Joystick").GetComponent<Joystick>();
     }
 
-    private void Update()
+    private void Start()
     {
+        TextName.text = _view.Owner.NickName;
+    }
+
+    private void FixedUpdate()
+    {
+        _horizontalInput = _joystick.Horizontal;
         if (_view.IsMine)
         {
-            _horizontalInput = Joystick.Horizontal;
-            _verticalInput = Joystick.Vertical;
             MovePlayer();
         } 
     }
