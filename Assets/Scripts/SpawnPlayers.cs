@@ -9,6 +9,6 @@ public class SpawnPlayers : MonoBehaviour
     private void Start()
     {
         Vector2 _randomPosition = new Vector2(Random.Range(MinX, MaxX), 0f);
-        PhotonNetwork.Instantiate (Player.name, _randomPosition, Quaternion.identity);
+        PhotonNetwork.Instantiate (Player.name, _randomPosition, Quaternion.identity, 0, new object[] {"1111"});
     }
 }
