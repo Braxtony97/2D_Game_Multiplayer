@@ -3,10 +3,9 @@ using UnityEngine;
 
 public class PoolObject : MonoBehaviour
 {
-    public GameObject BulletPrefab;
-
     private List<GameObject> _bullets;
-    [SerializeField] private int _number = 5;
+    [SerializeField] private int _number = 20;
+    [SerializeField] private GameObject _bulletPrefab;
 
     void Start()
     {
@@ -19,7 +18,7 @@ public class PoolObject : MonoBehaviour
 
         for (int i = 0; i < _number; i++)
         {
-            GameObject bullet = Instantiate(BulletPrefab);
+            GameObject bullet = Instantiate(_bulletPrefab);
             bullet.transform.parent = this.transform;
             bullet.SetActive(false);
             _bullets.Add(bullet);
@@ -37,7 +36,7 @@ public class PoolObject : MonoBehaviour
             }
         }
 
-        GameObject newBullet = Instantiate(BulletPrefab);
+        GameObject newBullet = Instantiate(_bulletPrefab);
         _bullets.Add(newBullet);
         return newBullet;
     }

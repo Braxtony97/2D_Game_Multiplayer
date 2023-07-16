@@ -5,6 +5,8 @@ using UnityEngine.UI;
 public class PlayerBehaviour : MonoBehaviour
 {
     public Text TextName;
+    public ShootPointerBehaviour PointerBehaviour;
+
 
     private PoolObject _bulletPool;
     private Joystick _joystick;
@@ -15,6 +17,7 @@ public class PlayerBehaviour : MonoBehaviour
     private PhotonView _view;
     [SerializeField] private float _speed;
     [SerializeField] Transform _bulletSpawnPoint;
+    
 
     private void Awake()
     {
@@ -24,24 +27,15 @@ public class PlayerBehaviour : MonoBehaviour
         _view = GetComponent<PhotonView>();
         _joystick = GameObject.FindGameObjectWithTag("Joystick").GetComponent<Joystick>();
         _bulletPool = GameObject.Find("ObjectPool").GetComponent<PoolObject>();
+        
     }
 
     private void Start()
     {
         TextName.text = _view.Owner.NickName;
+        PointerBehaviour = GameObject.Find("ShootPointer").GetComponent<ShootPointerBehaviour>();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            GameObject bullet = _bulletPool.GetBullet();
-            bullet.transform.position = transform.position;
-            bullet.transform.rotation = transform.rotation;
-            //Instantiate(bullet, _bulletSpawnPoint, )
-        }
-    }
-    
 
     private void FixedUpdate()
     {
@@ -58,8 +52,7 @@ public class PlayerBehaviour : MonoBehaviour
         {
             _rigidbody.velocity = new Vector2(_speed * _horizontalInput, 0f);
             _animator.SetBool("Running", true);
-            FlixPlayer();
-            
+            FlixPlayer(); 
         }
 
         else 
@@ -68,15 +61,24 @@ public class PlayerBehaviour : MonoBehaviour
         }  
     }
 
+    public void Fire()
+    {
+            GameObject bullet = _bulletPool.GetBullet();
+            bullet.transform.position = _bulletSpawnPoint.position;          
+    }
+
     public void FlixPlayer()
     {
         if (_horizontalInput > 0)
         {
             _spriteRenderer.flipX = true;
+            PointerBehaviour.RotatePointer(true);
+
         }
         else if (_horizontalInput < 0)
         {
             _spriteRenderer.flipX = false;
+            PointerBehaviour.RotatePointer(false);
         }
     }
 }
